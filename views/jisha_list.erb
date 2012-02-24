@@ -1,0 +1,27 @@
+<h2>An all alive jisha list.</h2><br>
+
+<table width='900px'>
+ <tr>
+ <td width='5%'><h3>No.</h3></td>
+ <td width='12%'><h3>Jisha Code</h3></td> 
+ <td width='5%'><h3>Port </h3></td>
+ <td width='5%'><h3>   Alive  </h3></td>
+ <td width='5%'><h3>   Mode  </h3></td>
+ <td width='15%'><h3>Send Telegram</h3></td>
+ <td width='15%'><h3>Realtime log/JNL</h3></td>
+ <td width='15%'><h3>Stop Jisha</h3></td>
+ </tr>
+<% @@jisha.each do |k,v|%>
+ <tr>
+ <td width='5%'><%= k %></td>
+ <td width='12%'><%= v.nil? ? nil : v[0].jisha_code%></td>
+ <td width='5%'><%= v.nil? ? nil : v[0].port%></td>
+ <td width='5%'><%= v.nil? ? nil : v[0].is_alive?%></td>
+ <td width='5%'><%= v.nil? ? nil : v[0].mode%></td>
+ <td width='15%'><a href='/jisha/send/config'>Send telegram</a></td>
+ <td width='15%'><a href='/jisha/rtlog'>Realtime log view</a></td>
+ <td width='15%'><a href="/jisha/stop/<%=k%>">Stop jisha</a></td>
+ </tr>
+<% end%>
+
+</table><br>

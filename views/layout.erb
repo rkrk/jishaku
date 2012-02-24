@@ -1,0 +1,25 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+ <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+ <title>Jisha 9</title>
+ <link rel="stylesheet" type="text/css" href="/style.css"/>
+ <link rel="shortcut icon" href="/favicon.png">
+</head>
+<body id='container'>
+<img src='/title.png'>
+<%= yield %>
+<div id='footer'><a href='/home'>Home</a> | <a href='/jisha/list'>Jisya List</a>| <a href='/jisha/add'>Add a Jisha</a>| <a href='/jisha/jnl'>Jnl Search</a>| <a href='/about'>About me</a></div>
+<div id='copyright'>Copyright &copy;<a href='
+http://www.csl.org
+'>CSL</a> 2012</div>
+
+<table>
+<tr><td>[ENV]key</td><td>[ENV]value</td><tr>
+<% @env.each do |k,v|%>
+<tr><td><%=k%></td><td><%=v%></td></tr>
+<% end%>
+<table>
+
+</body>
+</html>
