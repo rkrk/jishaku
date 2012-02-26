@@ -17,7 +17,7 @@ class Jisha
 	class SocketTimeoutError < RuntimeError
 	end
 
-	attr_reader :status
+	attr_reader :status,:jnl_c,:error_c
 	attr_accessor :jisha_code,:host,:port,:send_q,:mode
 	
 	RETRY_MAX = 5 
@@ -61,15 +61,14 @@ class Jisha
 				# t2 = Thread.new { @sock.synchronize{tcp_out} } 
 				while true
 				
-				############################################IMPORTANT !!!!!!!!!!!!    ########################################################################
-				#######################################THE <sleep> after <Thread.new{}> ######################################################################
-				#
-				Thread.new { tcp_in }.run ;sleep(0.01)
+############################################IMPORTANT !!!!!!!!!!!!    ##################################################
+#######################################THE <sleep> after <Thread.new{}> ################################################
+				Thread.new { tcp_in }.run ;sleep(0.00001)
 				# t2 = 
 				# while t1
 					 # Thread.list {|t| p t};sleep(10)
-					 Thread.new{ tcp_out }.run;sleep(0.01)
-					 Thread.new{ receive }.run;sleep(0.01)
+					 Thread.new{ tcp_out }.run;sleep(0.00001)
+					 Thread.new{ receive }.run;sleep(0.00001)
 					 # 3.times {|n|threads[n].run}
 					 # threads.each {|t| t.join}
 				# end
@@ -107,48 +106,51 @@ class Jisha
 		 end
 	end
 	
-	def stop
-		 @status = "Inited"
-		 @sock = nil
-	end
+	# def stop
+		 # @status = "Inited"
+		 # @sock = nil
+	# end
 	
 	def is_alive?
 		 "#{@status}"
 	end
 
 	def to_s
-		 # "#{@jisha_code} on ip:#{@host} & port: #{@port}"
-		 "test"
+		 "#{@jisha_code} on ip:#{@host} & port: #{@port}"
+		 # "test"
 	end
 	
 	private
 
 	def tcp_in
-		 p "TCP Incoming thread".center(50,"-")
+		 # p "TCP Incoming thread".center(50,"-")
 		 while true
 			t = @sock.gets
 			# Timeout::timeout(2) do
-			p "Get an incoming telegram ..."
-			p "->[#{t[0,63].to_s} ...]"
+			# p "Get an incoming telegram ..."
+			# p "->[#{t[0,63].to_s} ...]"
 			@receive_q.push t
-			p "Push incoming telegram into receive_q..."
+			# p "Push incoming telegram into receive_q..."
 			# end
+			sleep(0.001)
 		 end
 	end
 
 	def tcp_out
 		 while true
-			p "TCP Outgoing thread".center(50,"-")
+			# p "TCP Outgoing thread".center(50,"-")
 			# Timeout::timeout(2) do
-			p "Nothing for send...";return if @send_q.size == 0
+			# p "Nothing for send...";
+			return if @send_q.size == 0
 			t = @send_q.shift 
-			p "Shift outgoing telegram from send_q"
-			p "<-[#{t[0,63].to_s}]"
+			# p "Shift outgoing telegram from send_q"
+			# p "<-[#{t[0,63].to_s}]"
 			@sock.puts t #@send_q.shift #timeout handle??
+			@jnl_c << "sen" + t.to_s
 			# @thread_count -= 1
-			p "Sent an outgoing telegram ......"
+			# p "Sent an outgoing telegram ......"
 			# end
-			sleep(0.05)
+			sleep(0.005)
 		 end
 	end
 
@@ -156,37 +158,39 @@ class Jisha
 		# retry_count = 0 
 		 while true
 			# Thread.stop #if @thread_count > 10
-			p "Telegram receive thread".center(50,"-")
+			# p "Telegram receive thread".center(50,"-")
 			if @receive_q.size == 0
-				p "Nothing in receive_q."
-				sleep(1)
+				# p "Nothing in receive_q."
+				sleep(0.001)
 				return 
 			end
 			
-			p t = @receive_q.shift
+			t = @receive_q.shift
 			
-			p "->->[#{t[0,63].to_s} ...]"
-			p "mt [#{t.to_s[43,4]}]"
+			# p "->->[#{t[0,63].to_s} ...]"
+			# p "mt [#{t.to_s[43,4]}]"
 			# p is_req? t
 			# p is_res? t
 			if is_req? t
-				p "@Get a request telegram.Message type: [#{t.to_s[43,4]}]"
+				# p "@Get a request telegram.Message type: [#{t.to_s[43,4]}]"
 				reply_t = reply t
-				p "@Reply incoming telegram with :\n"
-				p "<-<-[#{reply_t[0,63]} ...]"
-				@send_q.push reply(t)
-				p "@Push reply-telegram into send_q." 
+				# p "@Reply incoming telegram with :\n"
+				# p "<-<-[#{reply_t[0,63]} ...]"
+				@send_q.push reply_t
+				@jnl_c << "req" + reply_t.to_s
+				# p "@Push reply-telegram into send_q." 
 			elsif is_res? t
-				p "@Get a respond telegram.Message type: [#{t.to_s[43,4]}]"
-				@jnl_c << t
+				# p "@Get a respond telegram.Message type: [#{t.to_s[43,4]}]"
+				@jnl_c << "res" + t.to_s
 			else
-				p "WrongTelegramError"
+				# p "WrongTelegramError"
 				# @error_c << t;sleep(1)
 				@send_q << "error telegram!!!!!!"
+				@error_c << "error telegram!!!!!!"
 				Thread.pass
 				receive
 			end
-			sleep(1)
+			sleep(0.001)
 		 end
 	end
 	
@@ -267,10 +271,10 @@ class Object
 end
 
 
-j = Jisha.new("2a961",12345)
+# j = Jisha.new("2a961",12345)
 # 5.times {|n|j.send_q << "test"*n}
 # sleep(1)
-j.run
+# j.run
 # j.run_as_receiver_only
 
 

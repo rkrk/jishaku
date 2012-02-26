@@ -18,9 +18,11 @@
  <td width='5%'><%= v.nil? ? nil : v[0].port%></td>
  <td width='5%'><%= v.nil? ? nil : v[0].is_alive?%></td>
  <td width='5%'><%= v.nil? ? nil : v[0].mode%></td>
- <td width='15%'><a href='/jisha/send/config'>Send telegram</a></td>
- <td width='15%'><a href='/jisha/rtlog'>Realtime log view</a></td>
- <td width='15%'><a href="/jisha/stop/<%=k%>">Stop jisha</a></td>
+ <td width='15%'>
+	<a href='/jisha/<%=k%>/send'><%= v[0].mode == "receiver only" ? nil : "Send telegram" %></a> 
+ </td>
+ <td width='15%'><a href='/jisha/<%=k%>/rtlog'>Realtime log view</a></td>
+ <td width='15%'><a href="/jisha/<%=k%>/stop">Stop jisha</a></td>
  </tr>
 <% end%>
 

@@ -1,7 +1,7 @@
-<h2>Send Config</h2><br>
+<h2>Send Telegram</h2><br>
 
  
-<form action='/jisha/rtlog'>
+<ol>
 <li>Gyoumu(caf online/extension-define)</li>
 <li>Telegram input setting(must/extension/full)</li>
 <li>Telegram send(telegram single/batch/sequence/random)</li>
@@ -10,58 +10,89 @@
 <li></li>
 <li></li>
 <li></li>
+</ol>
+<br>
 
-<input type="submit" value="Start">
+<div id="sendingOption">
+<form id="form1" name="form1" method="post" action="">
+	<table>
+	<tr>
+		<td>Gyoumu</td><td>Telegram input setting</td><td>Telegram send setting</td><td>Telegram reply</td>
+	</tr>
+
+	<tr>
+		<td>
+		<select name="select" id="select" >
+			<option value="bz_type">caf-online</option>
+			<option value="bz_type">extension-define</option>
+			caf-online
+		</select>
+		</td>
+		<td>
+		<select name="select" id="select" >
+			<option value="t_input_setting">must</option>
+			<option value="t_input_setting">full</option>
+			<option value="t_input_setting">extension</option>
+			must
+		</select>
+		</td>
+		<td>
+		<select name="select" id="select" >
+			<option value="t_send_setting">single</option>
+			<option value="t_send_setting">batch</option>
+			<option value="t_send_setting">sequence</option>
+			<option value="t_send_setting">random</option>
+			single
+		</select>
+		</td>
+		<td>
+		<select name="select" id="select" >
+			<option value="t_reply_setting">all</option>
+			<option value="t_reply_setting">port</option>
+			all
+		</select>
+		</td>
+	</tr>
+
+	<tr>
+		<td><input type="submit" value="Comfirm"></td>
+	</tr>
+
+	</table>
 </form>
-
-<div id="realtime_log">
- <div id="a_rt_log" >
- <h3>Realtime Log</h3>
- reltimelog by ajax(jquery) ......<br>
- reltimelog ......<br>
- reltimelog ......<br>
- reltimelog ......<br>
- reltimelog ......<br>
- reltimelog ......<br>
- <br><br><br>
- </div>
- <form action='/jisha/rt_log/add' method="POST" >
- <table width='360px'>
- <tr>
- <td width="15%"> <h3>Jisha Code</h3> </td>
- </tr>
-
- <tr>
- <td> <input name="jisha_code" type="text" size="15" value=""> </td>
- </tr>
-
- <tr>
- <td > <input type="submit" value="Add"> </td>
- </tr>
- </table>
- </form>
- <br>
 </div>
 
-<div id="">
- <table>
- <tr>
- <td>send</td> 
- <td>receive</tr>
- </tr>
- <div id="telegram">
- <tr>
- <td>telegram send</td> 
- <td>telegram receive</tr>
- </tr>
- </div>
- <tr>
- <td><input type="submit" value="Parse"></td> 
 
- </tr>
- <table>
- 
- 
+<br>
+
+<div id="sendTelegram">
+<form action="/jisha/<%= @jisha_no %>/send/single" method="POST">
+	<input name="single_telegram" type="text" value="Paste a telegram here...">
+	<input name="send" type="submit" value="Send">
+	<a href="/jisha/<%= @jisha_no %>/send/single">send</a>
+</form>
+</div>
+
+<div id="jnl">
+	<table>
+	<form action="/jisha/jnl/" method="POST">
+		<tr><td>send/receive</td><td>text</tr></tr>
+ 		<div id="jnl_text">
+				<% @jisha.jnl_c.each do |jnl| %>
+				<tr>
+				<td><%= jnl[0..2] %></td> 
+				<td><%= jnl[3..-1] %></td>
+				</tr>
+				<% end %>
+		</div>
+		</tr>
+			<td><input type="submit" value="Parse"></td> 
+		</tr>
+		</tr>
+			<td><input type="submit" value="To HEX"></td> 
+		</tr>
+	</form>
+	<table>
 </div>
 
 <br>

@@ -17,10 +17,10 @@ puts at = Time.now
 	TCPSocket.open(host,port) do |s|
 	# Thread.new do 
 	# sleep(100)
-		 p "->#{Thread.current}"
+		 # p "->#{Thread.current}"
 		 10.times do |num|
 			 s.puts t[rand(3)]
-			 puts s.gets
+			 s.gets
 		 end
 	# end
 	# sleep(0.1)
